@@ -1,0 +1,32 @@
+import socketfuncs
+import socket
+import sys
+
+addr = input("Enter the ip address: ")
+username = input("Username: ")
+s = socket.socket()
+
+s.connect((addr, 10333))
+msg = socketfuncs.receive_message(s)msg != "BBS Server 1.2":
+	print("Wrong protocol!")
+	sys.exit()
+msg = socketfuncs.receive_message(s)
+print(msg)
+socketfuncs.send_message(s, username)
+while True:
+	msg = input("Enter your message: ")
+	socketfuncs.send_message(s, msg)
+	if msg == "quit":
+		break
+	elif msg == "dm":
+		msgto =  input("To? ")
+		msg = input("Message (DM): ")
+		socketfuncs.send_message(s, msgto)
+		socketfuncs.send_message(s, msg)
+
+	elif msg == "listdm" or msg == "listdms" or msg == "list":
+		msgcount = int(socketfuncs.receive_message(s))
+		for i in range(msgcount):
+			m = socketfuncs.receive_message(s)
+			print(m)
+s.close()

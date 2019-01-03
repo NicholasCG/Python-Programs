@@ -1,0 +1,31 @@
+import socketfuncs
+import socket
+
+while True:
+                                                                                                  │
+s = socket.socket()                                                                               │addr = input("Enter the ip address: ")
+s.bind(('0.0.0.0', 10333))                                                                        │username = input("Username: ")
+                                                                                                  │s = socket.socket()
+msghistory = []                                                                                   │
+while True:                                                                                       │s.connect((addr, 10333))
+        s.listen(10)                                                                              │msg = socketfuncs.receive_message(s)
+                                                                                                  │print(msg)
+        (conn, address) = s.accept()                                                              │msg = socketfuncs.receive_message(s)
+        print("Got connection from {}".format(address))                                           │print(msg)
+        socketfuncs.send_message(conn, "BBS Server 1.1")                                          │socketfuncs.send_message(s, username)
+        socketfuncs.send_message(conn, "Welcome \nsend \'list\' to print out previous messages." +│while True:
+        "\nSend \'quit\' to exit the server.")                                                    │        msg = input("Enter your message: ")
+        username = socketfuncs.receive_message(conn)                                              │        socketfuncs.send_message(s, msg)
+        while True:                                                                               │        if msg == "quit":
+                msg = socketfuncs.receive_message(conn)                                           │                break
+                print("{} ({}): {}".format(username, address[0], msg))                            │        elif msg == "dm":
+                                                                                                  │                msgto =  input("To? ")
+                if msg == "quit":                                                                 │                msg = input("Message (DM): ")
+                        print("<{} ({}) has disconnected>.".format(username, address[0]))         │                socketfuncs.send_message(s, msgto)
+                        msghistory.append("<{} ({}) has disconnected.>".format(username, address[$│                socketfuncs.send_message(s, msg)
+                        break                                                                     │        elif msg == "list":
+                elif msg == "dm":                                                                 │                msgcount = int(socketfuncs.receive_message(s))
+                                                                                                  │                for i in range(msgcount):
+                        msgto = socketfuncs.receive_message(conn)                                 │                        m = socketfuncs.receive_message(s)
+                        msg = socketfuncs.receive_message(conn)                                   │                        print(m)
+                        print("Got DM from {} to {}: {}".format(use

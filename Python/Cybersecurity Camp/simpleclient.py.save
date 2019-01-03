@@ -1,0 +1,9 @@
+import socketfuncs
+import socket
+
+s = socket.socket()
+s.connect(('', 10333))
+
+msg = "Hey, hack into the projector"
+socketfuncs.send_message(s, msg)
+s.close()
